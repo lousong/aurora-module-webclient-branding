@@ -61,7 +61,7 @@ _.extendOwn(СAdminSettingsView.prototype, CAbstractSettingsFormView.prototype);
 
 СAdminSettingsView.prototype.setAccessLevel = function (sEntityType, iEntityId)
 {
-	this.visible(sEntityType === '');
+	this.visible(sEntityType === '' || sEntityType === 'Tenant');
 };
 
 module.exports = new СAdminSettingsView();

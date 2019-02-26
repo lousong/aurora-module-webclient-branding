@@ -41,13 +41,35 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * 
 	 * @return array
 	 */
-	public function GetSettings()
+	public function GetSettings($TenantId = null)
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
+
+		$sLoginLogo = '';
+		$sTabsbarLogo = '';
+
+		$oSettings = $this->GetModuleSettings();
+		if (!empty($TenantId))
+		{
+			\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::TenantAdmin);
+			$oTenant = \Aurora\System\Api::getTenantById($TenantId);
+
+			if ($oTenant)
+			{
+				$sLoginLogo = $oSettings->GetTenantValue($oTenant->Name, 'LoginLogo', $LoginLogo);		
+				$sTabsbarLogo = $oSettings->GetTenantValue($oTenant->Name, 'TabsbarLogo', $TabsbarLogo);		
+			}
+		}
+		else
+		{
+			$sLoginLogo = $oSettings->GetValue('LoginLogo', $LoginLogo);		
+			$sTabsbarLogo = $oSettings->GetValue('TabsbarLogo', $TabsbarLogo);		
+		}
+
 		
 		return array(
-			'LoginLogo' => $this->getConfig('LoginLogo'),
-			'TabsbarLogo' => $this->getConfig('TabsbarLogo')
+			'LoginLogo' => $sLoginLogo,
+			'TabsbarLogo' => $sTabsbarLogo
 		);
 	}
 
@@ -56,14 +78,29 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * @param int $ContactsPerPage Count of contacts per page.
 	 * @return boolean
 	 */
-	public function UpdateSettings($LoginLogo, $TabsbarLogo)
+	public function UpdateSettings($LoginLogo, $TabsbarLogo, $TenantId = null)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::SuperAdmin);
-		
-		$this->setConfig('LoginLogo', $LoginLogo);
-		$this->setConfig('TabsbarLogo', $TabsbarLogo);
+		$oSettings = $this->GetModuleSettings();
+		if (!empty($TenantId))
+		{
+			\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::TenantAdmin);
+			$oTenant = \Aurora\System\Api::getTenantById($TenantId);
 
-		return $this->saveModuleConfig();
+			if ($oTenant)
+			{
+				$oSettings->SetTenantValue($oTenant->Name, 'LoginLogo', $LoginLogo);		
+				$oSettings->SetTenantValue($oTenant->Name, 'TabsbarLogo', $TabsbarLogo);		
+				return $oSettings->SaveTenantSettings($oTenant->Name);
+			}
+		}
+		else
+		{
+			\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::SuperAdmin);
+
+			$oSettings->SetValue('LoginLogo', $LoginLogo);
+			$oSettings->SetValue('TabsbarLogo', $TabsbarLogo);
+			return $oSettings->Save();
+		}
 	}
 
 	/***** public functions might be called with web API *****/
