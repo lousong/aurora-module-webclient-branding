@@ -56,14 +56,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
 			if ($oTenant)
 			{
-				$sLoginLogo = $oSettings->GetTenantValue($oTenant->Name, 'LoginLogo', $LoginLogo);		
-				$sTabsbarLogo = $oSettings->GetTenantValue($oTenant->Name, 'TabsbarLogo', $TabsbarLogo);		
+				$sLoginLogo = $oSettings->GetTenantValue($oTenant->Name, 'LoginLogo', $sLoginLogo);		
+				$sTabsbarLogo = $oSettings->GetTenantValue($oTenant->Name, 'TabsbarLogo', $sTabsbarLogo);		
 			}
 		}
 		else
 		{
-			$sLoginLogo = $oSettings->GetValue('LoginLogo', $LoginLogo);		
-			$sTabsbarLogo = $oSettings->GetValue('TabsbarLogo', $TabsbarLogo);		
+			$sLoginLogo = $oSettings->GetValue('LoginLogo', $sLoginLogo);		
+			$sTabsbarLogo = $oSettings->GetValue('TabsbarLogo', $sTabsbarLogo);		
 		}
 
 		

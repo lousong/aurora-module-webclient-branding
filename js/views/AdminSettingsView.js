@@ -4,7 +4,9 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
+	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	CAbstractSettingsFormView = ModulesManager.run('AdminPanelWebclient', 'getAbstractSettingsFormViewClass'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
@@ -56,12 +58,42 @@ _.extendOwn(СAdminSettingsView.prototype, CAbstractSettingsFormView.prototype);
  */
 СAdminSettingsView.prototype.applySavedValues = function (oParameters)
 {
-	Settings.update(oParameters);
+	if (!Types.isPositiveNumber(this.iTenantId))
+	{
+		Settings.update(oParameters);
+	}
 };
 
 СAdminSettingsView.prototype.setAccessLevel = function (sEntityType, iEntityId)
 {
 	this.visible(sEntityType === '' || sEntityType === 'Tenant');
+	this.iTenantId = iEntityId;
+};
+
+СAdminSettingsView.prototype.onRouteChild = function (aParams)
+{
+	this.requestPerTenantSettings();
+};
+
+СAdminSettingsView.prototype.requestPerTenantSettings = function ()
+{
+	if (Types.isPositiveNumber(this.iTenantId))
+	{
+		this.loginLogo('');
+		this.tabsbarLogo('');
+		Ajax.send(Settings.ServerModuleName, 'GetSettings', { 'TenantId': this.iTenantId }, function (oResponse) {
+			if (oResponse.Result)
+			{
+				this.loginLogo(oResponse.Result.LoginLogo);
+				this.tabsbarLogo(oResponse.Result.TabsbarLogo);
+				this.updateSavedState();
+			}
+		}, this);
+	}
+	else
+	{
+		this.revertGlobalValues();
+	}
 };
 
 module.exports = new СAdminSettingsView();
