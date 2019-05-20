@@ -4,11 +4,7 @@ module.exports = function (oAppData) {
 	require('%PathToCoreWebclientModule%/js/vendors/jquery.cookie.js');
 	
 	var
-		$ = require('jquery'),
-		ko = require('knockout'),
-		
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-		Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 		
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
@@ -17,7 +13,7 @@ module.exports = function (oAppData) {
 	
 	Settings.init(oAppData);
 
-	if (App.getUserRole() === Enums.UserRole.SuperAdmin)
+	if (App.getUserRole() === Enums.UserRole.SuperAdmin || App.getUserRole() === Enums.UserRole.TenantAdmin)
 	{
 		return {
 			start: function (ModulesManager) {
@@ -28,7 +24,7 @@ module.exports = function (oAppData) {
 							function() {
 								resolve(require('modules/%ModuleName%/js/views/AdminSettingsView.js'));
 							},
-							"admin-bundle"
+							'admin-bundle'
 						);
 					},
 					Settings.HashModuleName,
