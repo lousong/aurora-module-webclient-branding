@@ -10,5 +10,13 @@
 	"TabsbarLogo": [
 		"",
 		"string"
+    ],
+	"TopIframeUrl": [
+        "",
+        "string"
+	],
+	"TopIframeHeightPx": [
+        0,
+        "int"
 	]
 }
