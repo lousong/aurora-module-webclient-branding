@@ -121,7 +121,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		
 		$aParts = parse_url($sUrl);
 		$aQuery = [];
-		if (is_string($aParts['query']) && !empty($aParts['query']))
+		if (isset($aParts['query']) && is_string($aParts['query']) && !empty($aParts['query']))
 		{
 			parse_str($aParts['query'], $aQuery);
 		}
