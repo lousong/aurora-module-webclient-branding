@@ -45,10 +45,15 @@ _.extendOwn(СAdminSettingsView.prototype, CAbstractSettingsFormView.prototype);
 
 СAdminSettingsView.prototype.getParametersForSave = function ()
 {
-	return {
+	var oParameters = {
 		'LoginLogo': this.loginLogo(),
 		'TabsbarLogo': this.tabsbarLogo()
 	};
+	if (Types.isPositiveNumber(this.iTenantId)) // branding is shown for particular tenant
+	{
+		oParameters.TenantId = this.iTenantId;
+	}
+	return oParameters;
 };
 
 /**
