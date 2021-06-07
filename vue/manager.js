@@ -1,4 +1,8 @@
+import settings from "../../BrandingWebclient/vue/settings";
 export default {
+	init (appData) {
+		settings.init(appData)
+	},
 	getAdminSystemTabs () {
 		return [
 			{
