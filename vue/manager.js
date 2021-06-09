@@ -1,5 +1,6 @@
 import settings from "../../BrandingWebclient/vue/settings";
 export default {
+	name: 'BrandingWebclient',
 	init (appData) {
 		settings.init(appData)
 	},
