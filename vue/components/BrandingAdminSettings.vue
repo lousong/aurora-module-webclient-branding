@@ -7,14 +7,14 @@
       <q-card flat bordered class="card-edit-settings">
         <q-card-section>
           <div class="row q-mb-md">
-            <div class="col-1">{{ $t('BRANDINGWEBCLIENT.LOGIN_LOGO_URL_LABEL') }}</div>
-            <div class="col-5">
+            <div class="col-2 q-mt-sm">{{ $t('BRANDINGWEBCLIENT.LOGIN_LOGO_URL_LABEL') }}</div>
+            <div class="col-4">
               <q-input outlined dense class="bg-white" v-model="loginLogoUrl"/>
             </div>
           </div>
           <div class="row q-mb-md">
-            <div class="col-1">{{ $t('BRANDINGWEBCLIENT.TABSBAR_LOGO_URL_LABEL') }}</div>
-            <div class="col-5">
+            <div class="col-2 q-mt-sm">{{ $t('BRANDINGWEBCLIENT.TABSBAR_LOGO_URL_LABEL') }}</div>
+            <div class="col-4">
               <q-input outlined dense class="bg-white" v-model="tabsBarLogoUrl"/>
             </div>
           </div>
