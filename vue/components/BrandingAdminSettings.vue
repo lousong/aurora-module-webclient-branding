@@ -9,42 +9,44 @@
           <div class="row q-mb-md">
             <div class="col-1">{{ $t('BRANDINGWEBCLIENT.LOGIN_LOGO_URL_LABEL') }}</div>
             <div class="col-5">
-              <q-input outlined dense class="bg-white" v-model="sLoginLogoUrl" />
+              <q-input outlined dense class="bg-white" v-model="loginLogoUrl"/>
             </div>
           </div>
           <div class="row q-mb-md">
             <div class="col-1">{{ $t('BRANDINGWEBCLIENT.TABSBAR_LOGO_URL_LABEL') }}</div>
             <div class="col-5">
-              <q-input outlined dense class="bg-white" v-model="sTabsBarLogoUrl" />
+              <q-input outlined dense class="bg-white" v-model="tabsBarLogoUrl"/>
             </div>
           </div>
         </q-card-section>
       </q-card>
       <div class="q-pa-md text-right">
         <q-btn unelevated no-caps dense class="q-px-sm" :ripple="false" color="primary"
-               :label="saving ? $t('COREWEBCLIENT.ACTION_SAVE_IN_PROGRESS') : $t('COREWEBCLIENT.ACTION_SAVE')" @click="saveBrandingsSettings"/>
+               :label="saving ? $t('COREWEBCLIENT.ACTION_SAVE_IN_PROGRESS') : $t('COREWEBCLIENT.ACTION_SAVE')"
+               @click="saveBrandingSettings"/>
       </div>
     </div>
-    <UnsavedChangesDialog ref="unsavedChangesDialog" />
+    <UnsavedChangesDialog ref="unsavedChangesDialog"/>
   </q-scroll-area>
 </template>
 
 <script>
-import webApi from "../../../AdminPanelWebclient/vue/src/utils/web-api";
-import settings from "../../../BrandingWebclient/vue/settings";
-import notification from "../../../AdminPanelWebclient/vue/src/utils/notification";
-import errors from "../../../AdminPanelWebclient/vue/src/utils/errors";
+import webApi from '../../../AdminPanelWebclient/vue/src/utils/web-api'
+import settings from '../../../BrandingWebclient/vue/settings'
+import notification from 'src/utils/notification'
+import errors from '../../../AdminPanelWebclient/vue/src/utils/errors'
 import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
-import _ from "lodash";
+import _ from 'lodash'
+
 export default {
   name: 'BrandingAdminSettings',
   components: {
     UnsavedChangesDialog
   },
-  data() {
+  data () {
     return {
-      sLoginLogoUrl: '',
-      sTabsBarLogoUrl: '',
+      loginLogoUrl: '',
+      tabsBarLogoUrl: '',
       saving: false,
     }
   },
@@ -59,46 +61,47 @@ export default {
       next()
     }
   },
-  
+
   methods: {
     hasChanges () {
       const data = settings.getBrandingsSettings()
-      return this.sLoginLogoUrl !== data.loginLogo ||
-          this.sTabsBarLogoUrl !== data.tabsbarLogo
+      return this.loginLogoUrl !== data.loginLogo ||
+          this.tabsBarLogoUrl !== data.tabsbarLogo
     },
-  
+
     populate () {
       const data = settings.getBrandingsSettings()
-      this.sLoginLogoUrl = data.loginLogo
-      this.sTabsBarLogoUrl = data.tabsbarLogo
+      this.loginLogoUrl = data.loginLogo
+      this.tabsBarLogoUrl = data.tabsbarLogo
     },
-    saveBrandingsSettings() {
-        if (!this.saving) {
-          this.saving = true
-          const parameters = {
-            LoginLogo: this.sLoginLogoUrl,
-            TabsbarLogo: this.sTabsBarLogoUrl,
-          }
-          webApi.sendRequest({
-            moduleName: 'BrandingWebclient',
-            methodName: 'UpdateSettings',
-            parameters,
-          }).then(result => {
-            this.saving = false
-            if (result === true) {
-              settings.saveBrandingsSettings({
-                loginLogo: parameters.LoginLogo,
-                tabsbarLogo: parameters.TabsbarLogo,
-              })
-              notification.showReport(this.$t('COREWEBCLIENT.REPORT_SETTINGS_UPDATE_SUCCESS'))
-            } else {
-              notification.showError(this.$t('COREWEBCLIENT.ERROR_SAVING_SETTINGS_FAILED'))
-            }
-          }, response => {
-            this.saving = false
-            notification.showError(errors.getTextFromResponse(response, this.$t('COREWEBCLIENT.ERROR_SAVING_SETTINGS_FAILED')))
-          })
+    saveBrandingSettings () {
+      if (!this.saving) {
+        this.saving = true
+        const parameters = {
+          LoginLogo: this.loginLogoUrl,
+          TabsbarLogo: this.tabsBarLogoUrl,
         }
+        webApi.sendRequest({
+          moduleName: 'BrandingWebclient',
+          methodName: 'UpdateSettings',
+          parameters,
+        }).then(result => {
+          this.saving = false
+          if (result === true) {
+            settings.saveBrandingsSettings({
+              loginLogo: parameters.LoginLogo,
+              tabsbarLogo: parameters.TabsbarLogo,
+            })
+            this.populate()
+            notification.showReport(this.$t('COREWEBCLIENT.REPORT_SETTINGS_UPDATE_SUCCESS'))
+          } else {
+            notification.showError(this.$t('COREWEBCLIENT.ERROR_SAVING_SETTINGS_FAILED'))
+          }
+        }, response => {
+          this.saving = false
+          notification.showError(errors.getTextFromResponse(response, this.$t('COREWEBCLIENT.ERROR_SAVING_SETTINGS_FAILED')))
+        })
+      }
     }
   }
 }
