@@ -31,12 +31,15 @@
 </template>
 
 <script>
-import webApi from '../../../AdminPanelWebclient/vue/src/utils/web-api'
-import settings from '../../../BrandingWebclient/vue/settings'
-import notification from 'src/utils/notification'
-import errors from '../../../AdminPanelWebclient/vue/src/utils/errors'
-import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
 import _ from 'lodash'
+
+import errors from 'src/utils/errors'
+import notification from 'src/utils/notification'
+import webApi from 'src/utils/web-api'
+
+import settings from '../../../BrandingWebclient/vue/settings'
+
+import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
 
 export default {
   name: 'BrandingAdminSettings',
