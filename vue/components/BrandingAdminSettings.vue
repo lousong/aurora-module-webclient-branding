@@ -2,18 +2,18 @@
   <q-scroll-area class="full-height full-width">
     <div class="q-pa-lg ">
       <div class="row q-mb-md">
-        <div class="col text-h5">{{ $t('BRANDINGWEBCLIENT.HEADING_SETTINGS_TAB') }}</div>
+        <div class="col text-h5" v-t="'BRANDINGWEBCLIENT.HEADING_SETTINGS_TAB'"></div>
       </div>
       <q-card flat bordered class="card-edit-settings">
         <q-card-section>
           <div class="row q-mb-md">
-            <div class="col-2 q-mt-sm">{{ $t('BRANDINGWEBCLIENT.LOGIN_LOGO_URL_LABEL') }}</div>
+            <div class="col-2 q-mt-sm" v-t="'BRANDINGWEBCLIENT.LOGIN_LOGO_URL_LABEL'"></div>
             <div class="col-4">
               <q-input outlined dense class="bg-white" v-model="loginLogoUrl"/>
             </div>
           </div>
           <div class="row q-mb-md">
-            <div class="col-2 q-mt-sm">{{ $t('BRANDINGWEBCLIENT.TABSBAR_LOGO_URL_LABEL') }}</div>
+            <div class="col-2 q-mt-sm" v-t="'BRANDINGWEBCLIENT.TABSBAR_LOGO_URL_LABEL'"></div>
             <div class="col-4">
               <q-input outlined dense class="bg-white" v-model="tabsBarLogoUrl"/>
             </div>
