@@ -20,4 +20,21 @@ export default {
       },
     ]
   },
+  getAdminTenantTabs () {
+    return [
+      {
+        tabName: 'branding',
+        paths: [
+          'id/:id/branding',
+          'search/:search/id/:id/branding',
+          'page/:page/id/:id/branding',
+          'search/:search/page/:page/id/:id/branding',
+        ],
+        title: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
+        component () {
+          return import('src/../../../BrandingWebclient/vue/components/BrandingAdminSettingsPerTenant')
+        },
+      }
+    ]
+  }
 }
