@@ -26,6 +26,9 @@
                @click="saveBrandingSettings"/>
       </div>
     </div>
+    <q-inner-loading style="justify-content: flex-start;" :showing="loading || saving">
+      <q-linear-progress query class="q-mt-sm" />
+    </q-inner-loading>
     <UnsavedChangesDialog ref="unsavedChangesDialog"/>
   </q-scroll-area>
 </template>
@@ -51,6 +54,7 @@ export default {
       loginLogoUrl: '',
       tabsBarLogoUrl: '',
       saving: false,
+      loading: false,
       tenant: null
     }
   },
@@ -78,8 +82,10 @@ export default {
           this.tabsBarLogoUrl !== tabsBarLogoUrl
     },
     populate () {
+      this.loading = true
       cache.getTenant(this.tenantId).then(({ tenant }) => {
         if (tenant.completeData['BrandingWebclient::LoginLogo'] !== undefined) {
+          this.loading = false
           this.tenant = tenant
           this.loginLogoUrl = tenant.completeData['BrandingWebclient::LoginLogo']
           this.tabsBarLogoUrl = tenant.completeData['BrandingWebclient::TabsbarLogo']
