@@ -15,7 +15,7 @@ export default {
         tabName: 'branding',
         title: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
         component () {
-          return import('src/../../../BrandingWebclient/vue/components/BrandingAdminSettings')
+          return import('./components/BrandingAdminSettings')
         },
       },
     ]
@@ -32,7 +32,7 @@ export default {
         ],
         title: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
         component () {
-          return import('src/../../../BrandingWebclient/vue/components/BrandingAdminSettingsPerTenant')
+          return import('./components/BrandingAdminSettingsPerTenant')
         },
       }
     ]
