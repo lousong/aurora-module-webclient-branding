@@ -23,7 +23,7 @@
       <div class="q-pa-md text-right">
         <q-btn unelevated no-caps dense class="q-px-sm" :ripple="false" color="primary"
                :label="saving ? $t('COREWEBCLIENT.ACTION_SAVE_IN_PROGRESS') : $t('COREWEBCLIENT.ACTION_SAVE')"
-               @click="saveBrandingSettings"/>
+               @click="save"/>
       </div>
     </div>
     <q-inner-loading style="justify-content: flex-start;" :showing="loading || saving">
@@ -38,17 +38,18 @@ import _ from 'lodash'
 
 import errors from 'src/utils/errors'
 import notification from 'src/utils/notification'
+import types from 'src/utils/types'
 import webApi from 'src/utils/web-api'
-
-import cache from 'src/cache'
 
 import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
 
 export default {
   name: 'BrandingAdminSettingPerTenant',
+
   components: {
     UnsavedChangesDialog
   },
+
   data () {
     return {
       loginLogoUrl: '',
@@ -58,15 +59,29 @@ export default {
       tenant: null
     }
   },
+
   computed: {
     tenantId () {
-      return Number(this.$route?.params?.id)
+      return this.$store.getters['tenants/getCurrentTenantId']
+    },
+
+    allTenants () {
+      return this.$store.getters['tenants/getTenants']
     }
   },
+
+  watch: {
+    allTenants () {
+      this.populate()
+    },
+  },
+
   mounted () {
+    this.loading = false
     this.saving = false
     this.populate()
   },
+
   beforeRouteLeave (to, from, next) {
     if (this.hasChanges() && _.isFunction(this?.$refs?.unsavedChangesDialog?.openConfirmDiscardChangesDialog)) {
       this.$refs.unsavedChangesDialog.openConfirmDiscardChangesDialog(next)
@@ -74,27 +89,28 @@ export default {
       next()
     }
   },
+
   methods: {
     hasChanges () {
-      const loginLogoUrl = _.isFunction(this.tenant?.getData) ? this.tenant?.getData('BrandingWebclient::LoginLogo') : ''
-      const tabsBarLogoUrl = _.isFunction(this.tenant?.getData) ? this.tenant?.getData('BrandingWebclient::TabsbarLogo') : ''
-      return this.loginLogoUrl !== loginLogoUrl ||
-          this.tabsBarLogoUrl !== tabsBarLogoUrl
+      const tenantCompleteData = types.pObject(this.tenant?.completeData)
+      return this.loginLogoUrl !== tenantCompleteData['BrandingWebclient::LoginLogo'] ||
+          this.tabsBarLogoUrl !== tenantCompleteData['BrandingWebclient::TabsbarLogo']
     },
+
     populate () {
-      this.loading = true
-      cache.getTenant(this.tenantId).then(({ tenant }) => {
+      const tenant = this.$store.getters['tenants/getTenant'](this.tenantId)
+      if (tenant) {
         if (tenant.completeData['BrandingWebclient::LoginLogo'] !== undefined) {
-          this.loading = false
           this.tenant = tenant
           this.loginLogoUrl = tenant.completeData['BrandingWebclient::LoginLogo']
           this.tabsBarLogoUrl = tenant.completeData['BrandingWebclient::TabsbarLogo']
         } else {
           this.getSettings()
         }
-      })
+      }
     },
-    saveBrandingSettings () {
+
+    save () {
       if (!this.saving) {
         this.saving = true
         const parameters = {
@@ -109,17 +125,11 @@ export default {
         }).then(result => {
           this.saving = false
           if (result === true) {
-            cache.getTenant(parameters.TenantId, true).then(({ tenant }) => {
-              const brandingData = {
-                loginLogo: parameters.LoginLogo,
-                tabsbarLogo: parameters.TabsbarLogo
-              }
-              tenant.setCompleteData({
-                'BrandingWebclient::LoginLogo': brandingData.loginLogo,
-                'BrandingWebclient::TabsbarLogo': brandingData.tabsbarLogo,
-              })
-              this.populate()
-            })
+            const data = {
+              'BrandingWebclient::LoginLogo': parameters.LoginLogo,
+              'BrandingWebclient::TabsbarLogo': parameters.TabsbarLogo,
+            }
+            this.$store.commit('tenants/setTenantCompleteData', { id: this.tenantId, data })
             notification.showReport(this.$t('COREWEBCLIENT.REPORT_SETTINGS_UPDATE_SUCCESS'))
           } else {
             notification.showError(this.$t('COREWEBCLIENT.ERROR_SAVING_SETTINGS_FAILED'))
@@ -130,7 +140,9 @@ export default {
         })
       }
     },
+
     getSettings () {
+      this.loading = true
       const parameters = {
         TenantId: this.tenantId
       }
@@ -139,18 +151,13 @@ export default {
         methodName: 'GetSettings',
         parameters,
       }).then(result => {
+        this.loading = false
         if (result) {
-          cache.getTenant(parameters.TenantId).then(({ tenant }) => {
-            const brandingData = {
-              loginLogo: result.LoginLogo,
-              tabsbarLogo: result.TabsbarLogo
-            }
-            tenant.setCompleteData({
-              'BrandingWebclient::LoginLogo': brandingData.loginLogo,
-              'BrandingWebclient::TabsbarLogo': brandingData.tabsbarLogo,
-            })
-            this.populate()
-          })
+          const data = {
+            'BrandingWebclient::LoginLogo': types.pString(result.LoginLogo),
+            'BrandingWebclient::TabsbarLogo': types.pString(result.TabsbarLogo),
+          }
+          this.$store.commit('tenants/setTenantCompleteData', { id: this.tenantId, data })
         }
       })
     },
