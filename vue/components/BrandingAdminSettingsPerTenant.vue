@@ -82,6 +82,10 @@ export default {
      * Method is used in doBeforeRouteLeave mixin
      */
     hasChanges () {
+      if (this.loading) {
+        return false
+      }
+
       const tenantCompleteData = types.pObject(this.tenant?.completeData)
       return this.loginLogoUrl !== tenantCompleteData['BrandingWebclient::LoginLogo'] ||
           this.tabsBarLogoUrl !== tenantCompleteData['BrandingWebclient::TabsbarLogo']
