@@ -1,5 +1,7 @@
 import settings from '../../BrandingWebclient/vue/settings'
 
+import BrandingAdminSettingsPerTenant from './components/BrandingAdminSettingsPerTenant'
+
 export default {
   moduleName: 'BrandingWebclient',
 
@@ -13,28 +15,26 @@ export default {
     return [
       {
         tabName: 'branding',
-        title: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
-        component () {
-          return import('./components/BrandingAdminSettings')
-        },
+        tabTitle: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
+        tabRouteChildren: [
+          { path: 'branding', component: () => import('./components/BrandingAdminSettings') },
+        ],
       },
     ]
   },
+
   getAdminTenantTabs () {
     return [
       {
         tabName: 'branding',
-        paths: [
-          'id/:id/branding',
-          'search/:search/id/:id/branding',
-          'page/:page/id/:id/branding',
-          'search/:search/page/:page/id/:id/branding',
+        tabTitle: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
+        tabRouteChildren: [
+          { path: 'id/:id/branding', component: BrandingAdminSettingsPerTenant },
+          { path: 'search/:search/id/:id/branding', component: BrandingAdminSettingsPerTenant },
+          { path: 'page/:page/id/:id/branding', component: BrandingAdminSettingsPerTenant },
+          { path: 'search/:search/page/:page/id/:id/branding', component: BrandingAdminSettingsPerTenant },
         ],
-        title: 'BRANDINGWEBCLIENT.ADMIN_SETTINGS_TAB_LABEL',
-        component () {
-          return import('./components/BrandingAdminSettingsPerTenant')
-        },
       }
     ]
-  }
+  },
 }
