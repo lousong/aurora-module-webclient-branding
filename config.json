@@ -1,22 +1,42 @@
 {
-	"Disabled": [
-		false,
-		"bool"
-	],
-	"LoginLogo": [
-		"",
-		"string"
-	],
-	"TabsbarLogo": [
-		"",
-		"string"
-    ],
-	"TopIframeUrl": [
-        "",
-        "string"
-	],
-	"TopIframeHeightPx": [
-        0,
-        "int"
-	]
+  "Disabled": [
+    false,
+    "bool"
+  ],
+  "Disabled_Description": [
+    "",
+    "string"
+  ],
+  "LoginLogo": [
+    "",
+    "string"
+  ],
+  "LoginLogo_Description": [
+    "",
+    "string"
+  ],
+  "TabsbarLogo": [
+    "",
+    "string"
+  ],
+  "TabsbarLogo_Description": [
+    "",
+    "string"
+  ],
+  "TopIframeUrl": [
+    "",
+    "string"
+  ],
+  "TopIframeUrl_Description": [
+    "",
+    "string"
+  ],
+  "TopIframeHeightPx": [
+    0,
+    "int"
+  ],
+  "TopIframeHeightPx_Description": [
+    "",
+    "string"
+  ]
 }
