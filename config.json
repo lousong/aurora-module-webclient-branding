@@ -4,7 +4,7 @@
 		"bool"
 	],
 	"Disabled_Description": [
-		"",
+		"Setting to true disables the module",
 		"string"
 	],
 	"LoginLogo": [
@@ -12,7 +12,7 @@
 		"string"
 	],
 	"LoginLogo_Description": [
-		"",
+		"URL of logo image used on login page",
 		"string"
 	],
 	"TabsbarLogo": [
@@ -20,7 +20,7 @@
 		"string"
 	],
 	"TabsbarLogo_Description": [
-		"",
+		"URL of logo image used in top left corner of main interface",
 		"string"
 	],
 	"TopIframeUrl": [
@@ -28,7 +28,7 @@
 		"string"
 	],
 	"TopIframeUrl_Description": [
-		"",
+		"URL of iframe displaying custom content (e.g. advertisement) on top of main interface",
 		"string"
 	],
 	"TopIframeHeightPx": [
@@ -36,7 +36,7 @@
 		"int"
 	],
 	"TopIframeHeightPx_Description": [
-		"",
+		"Height of iframe with custom content, in pixels",
 		"string"
 	]
 }
